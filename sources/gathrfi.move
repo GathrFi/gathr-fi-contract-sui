@@ -1,6 +1,7 @@
 module gathr_fi_sui::gathrfi {
     use sui::coin::{Self, Coin};
     use sui::event;
+    use gathr_fi_sui::mock_usdc::MOCK_USDC;
 
     const EInvalidSplit: u64 = 1;
     const EAlreadySettled: u64 = 2;
@@ -8,7 +9,6 @@ module gathr_fi_sui::gathrfi {
     const EInsufficientCoin: u64 = 4;
     const EMemberNotFound: u64 = 5;
 
-    public struct COIN has drop {}
 
     public struct Member has store, copy, drop {
         addr: address,
@@ -113,9 +113,9 @@ module gathr_fi_sui::gathrfi {
 
     public fun settle_expense(
         expense: &mut Expense,
-        mut coin: Coin<COIN>,
+        mut coin: Coin<MOCK_USDC>,
         ctx: &mut TxContext
-    ): Coin<COIN> {
+    ): Coin<MOCK_USDC> {
         let sender = tx_context::sender(ctx);
         assert!(!expense.fully_settled, EExpenseFullySettled);
 

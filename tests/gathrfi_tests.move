@@ -1,7 +1,8 @@
 #[test_only]
 module gathr_fi_sui::gathrfi_tests {
     use sui::test_scenario;
-    use gathr_fi_sui::gathrfi::{Self, Expense, COIN};
+    use gathr_fi_sui::gathrfi::{Self, Expense};
+    use gathr_fi_sui::mock_usdc::MOCK_USDC;
     use sui::coin::{Self, Coin};
 
     #[test]
@@ -57,7 +58,7 @@ module gathr_fi_sui::gathrfi_tests {
 
         test_scenario::next_tx(&mut scenario, @0x2);
         {
-            let coin = coin::mint_for_testing<COIN>(
+            let coin = coin::mint_for_testing<MOCK_USDC>(
                 1000, 
                 test_scenario::ctx(&mut scenario)
             );
@@ -68,7 +69,7 @@ module gathr_fi_sui::gathrfi_tests {
         test_scenario::next_tx(&mut scenario, @0x2);
         {
             let mut expense: Expense = test_scenario::take_shared(&scenario);
-            let coin = test_scenario::take_from_sender<Coin<COIN>>(&scenario);
+            let coin = test_scenario::take_from_sender<Coin<MOCK_USDC>>(&scenario);
             
             let returned_coin = gathrfi::settle_expense(
                 &mut expense, 
